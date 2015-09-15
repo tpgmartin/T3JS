@@ -39,16 +39,19 @@ $(function () {
         return grid;
     }
 
-    function cyclePlayerToken(turn) {
-        return turn % 2 === 0 ? 'X ' : 'O';
+    function cyclePlayerToken() {
+        return 'X'
+        //return turn % 2 === 0 ? 'X ' : 'O';
     }
 
-    function updateGrid(ref, grid) {
-        refArray = ref.toString().split(',');
+    function updateGrid(ref, grid, token) {
+        var refArray = ref.toString().split(',');
 
-        grid[refArray[0]][refArray[1]] = 'X';
+        console.log(typeof token);
 
-        $('[data-ref="'+ref+'"]').text('X');
+        grid[refArray[0]][refArray[1]] = token;
+
+        $('[data-ref="'+ref+'"]').text(token);
 
         checkGrid(grid);
     }
@@ -77,13 +80,12 @@ $(function () {
             var grid = createGrid();
             renderGrid(grid);
         }
-        var token = cyclePlayerToken(turn);
+        var token = cyclePlayerToken();
 
         // UI components
         $('.grid-square').on('click', function () {
-            console.log(grid);
             var ref = $(this).data('ref');
-            updateGrid(ref, grid);
+            updateGrid(ref, grid, token);
         });
 
     };
