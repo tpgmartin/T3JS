@@ -11,3 +11,19 @@ html
 
             .grid-container
 
+        script.
+            $(function () {
+                var turn = newGame();
+
+                if (!grid) {
+                    var grid = createGrid();
+                    renderGrid(grid);
+                }
+
+                $('.grid-square').on('click', function () {;
+                    console.log('sdfsdfs');
+                    var ref = $(this).data('ref');
+                    var token = cyclePlayerToken(turn++);
+                    updateGrid(ref, grid, token);
+                });
+            });
