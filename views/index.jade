@@ -1,7 +1,6 @@
 html
     head
         script(src='/js/lib/jquery-1.11.3.min.js')
-        //script(src='/js/t3.js')
         link(rel='stylesheet', href='/css/styles.css')
         title T3
     body
@@ -56,18 +55,19 @@ html
                     grid[refArray[0]][refArray[1]] = token;
                     dataRef.text(token);
                     occupiedSquares[token].push(dataRef.data('count'));
-                    checkGrid(token);
+                    checkGrid(token, turn);
 
                 }
 
-                function checkGrid(token) {
+                function checkGrid(token, turn) {
                     var sum = occupiedSquares[token].reduce(function (a,b) { return a + b; });
 
                     if (sum === 15) {
                         alert('Winner Player ' + token);
-                        createClearGrid();
-                        resetTurns();
-                        resetOccupiedSquares();
+                        newGame();
+                    } else if (turn > 7) {
+                        alert('Game is tied');
+                        newGame();
                     }
 
                 }
@@ -81,6 +81,12 @@ html
                         'X': [],
                         'O': []
                     };
+                }
+
+                function newGame() {
+                    createClearGrid();
+                    resetTurns();
+                    resetOccupiedSquares();
                 }
 
                 var turn = resetTurns();
