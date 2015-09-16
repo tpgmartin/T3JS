@@ -21,9 +21,10 @@ html
                 }
 
                 $('.grid-square').on('click', function () {;
-                    console.log('sdfsdfs');
+                    console.log(turn);
                     var ref = $(this).data('ref');
-                    var token = cyclePlayerToken(turn++);
-                    updateGrid(ref, grid, token);
+                    var token = cyclePlayerToken(turn);
+                    updateGrid(ref, grid, token, turn);
+                    turn++;
                 });
             });
