@@ -14,9 +14,10 @@ html
         script.
             $(function () {
                 function createClearGrid() {
+                    var gridSquares = $('.grid-square');
 
-                    if ($('.grid-square')) {
-                        $('.grid-square').each(function () {
+                    if (gridSquares) {
+                        gridSquares.each(function () {
                             $(this).text('')
                         });
                     }
@@ -30,11 +31,14 @@ html
 
                 function renderGrid(grid) {
                     var gridContainer = $('.grid-container');
+                    // Use magic square numbers to determine winner
+                    var refs = [ 2, 7, 6, 9, 5, 1, 4, 3, 8 ];
+
                     if ($('.grid-square')) {
                         for (var i = grid.length - 1; i >= 0; i--) {
                             for (var j = grid[i].length - 1; j >= 0; j--) {
-                                var count = i * 3 + j;
-                                gridContainer.prepend('<div class="grid-square" data-count="' + count + '" data-ref="' + i + ',' + j + '">' + grid[i][j] + '</div>');
+                                var index = i * 3 + j;
+                                gridContainer.prepend('<div class="grid-square" data-count="' + refs[index] + '" data-ref="' + i + ',' + j + '">' + grid[i][j] + '</div>');
                             }
                         }
                     }
@@ -44,55 +48,43 @@ html
                     return turn % 2 === 0 ? 'X' : 'O';
                 }
 
-                function updateGrid(ref, grid, turn) {
+                function updateGrid(ref, grid, occupiedSquares, turn) {
                     var token = cyclePlayerToken(turn);
                     var refArray = ref.toString().split(',');
+                    var dataRef = $('[data-ref="' + ref + '"]');
 
                     grid[refArray[0]][refArray[1]] = token;
-                    $('[data-ref="' + ref + '"]').text(token);
-                    checkGrid(grid, turn);
+                    dataRef.text(token);
+                    occupiedSquares[token].push(dataRef.data('count'));
+                    checkGrid(token);
 
                 }
 
-                function checkGrid(grid, turn) {
-                    if (grid[0][0] + grid[0][1] + grid[0][2] === 'XXX' || grid[1][0] + grid[1][1] + grid[1][2] === 'XXX' || grid[2][0] + grid[2][1] + grid[2][2] === 'XXX') {
-                        alert('Winner Player X');
+                function checkGrid(token) {
+                    var sum = occupiedSquares[token].reduce(function (a,b) { return a + b; });
+
+                    if (sum === 15) {
+                        alert('Winner Player ' + token);
                         createClearGrid();
-                        newGame();
-                    } else if (grid[0][0] + grid[1][0] + grid[2][0] === 'XXX' || grid[0][1] + grid[1][1] + grid[2][1] === 'XXX' || grid[0][2] + grid[1][2] + grid[2][2] === 'XXX') {
-                        alert('Winner Player X');
-                        createClearGrid();
-                        newGame();
-                    } else if (grid[0][0] + grid[1][1] + grid[2][2] === 'XXX' || grid[2][0] + grid[1][1] + grid[0][2] === 'XXX') {
-                        alert('Winner Player X');
-                        createClearGrid();
-                        newGame();
-                    } else if (grid[0][0] + grid[0][1] + grid[0][2] === 'OOO' || grid[1][0] + grid[1][1] + grid[1][2] === 'OOO' || grid[2][0] + grid[2][1] + grid[2][2] === 'OOO') {
-                        alert('Winner Player O');
-                        createClearGrid();
-                        newGame();
-                    } else if (grid[0][0] + grid[1][0] + grid[2][0] === 'OOO' || grid[0][1] + grid[1][1] + grid[2][1] === 'OOO' || grid[0][2] + grid[1][2] + grid[2][2] === 'OOO') {
-                        alert('Winner Player O');
-                        createClearGrid();
-                        newGame();
-                    } else if (grid[0][0] + grid[1][1] + grid[2][2] === 'OOO' || grid[2][0] + grid[1][1] + grid[0][2] === 'OOO') {
-                        alert('Winner Player O');
-                        createClearGrid();
-                        newGame();
-                    } else if (turn > 7) {
-                        alert('Game ends in a draw');
-                        createClearGrid();
-                        newGame();
-                    } else {
-                        return;
+                        resetTurns();
+                        resetOccupiedSquares();
                     }
+
                 }
 
-                function newGame() {
+                function resetTurns() {
                     return turn = 0;
                 }
 
-                var turn = newGame();
+                function resetOccupiedSquares() {
+                    return occupiedSquares = {
+                        'X': [],
+                        'O': []
+                    };
+                }
+
+                var turn = resetTurns();
+                var occupiedSquares = resetOccupiedSquares();
 
                 if (!grid) {
                     var grid = createClearGrid();
@@ -102,8 +94,9 @@ html
                 $('.grid-square').on('click', function () {;
                     var ref = $(this).data('ref');
                     var refArray = ref.toString().split(',');
+
                     if (!grid[refArray[0]][refArray[1]]) {
-                        updateGrid(ref, grid, turn++);
+                        updateGrid(ref, grid, occupiedSquares, turn++);
                     } else {
                         alert('Square occupied');
                     }
