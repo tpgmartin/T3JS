@@ -48,13 +48,10 @@ html
                     var token = cyclePlayerToken(turn);
                     var refArray = ref.toString().split(',');
 
-                    if (!grid[refArray[0]][refArray[1]]) {
-                        grid[refArray[0]][refArray[1]] = token;
-                        $('[data-ref="' + ref + '"]').text(token);
-                        checkGrid(grid, turn);
-                    } else {
-                        alert('Square occupied')
-                    }
+                    grid[refArray[0]][refArray[1]] = token;
+                    $('[data-ref="' + ref + '"]').text(token);
+                    checkGrid(grid, turn);
+
                 }
 
                 function checkGrid(grid, turn) {
@@ -104,6 +101,11 @@ html
 
                 $('.grid-square').on('click', function () {;
                     var ref = $(this).data('ref');
-                    updateGrid(ref, grid, turn++);
+                    var refArray = ref.toString().split(',');
+                    if (!grid[refArray[0]][refArray[1]]) {
+                        updateGrid(ref, grid, turn++);
+                    } else {
+                        alert('Square occupied');
+                    }
                 });
             });
