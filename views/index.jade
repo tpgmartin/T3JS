@@ -13,14 +13,19 @@ html
 
         script.
             $(function () {
-                function createGrid() {
-                    var grid;
-                    grid = [
+                function createClearGrid() {
+
+                    if ($('.grid-square')) {
+                        $('.grid-square').each(function () {
+                            $(this).text('')
+                        });
+                    }
+
+                    return grid = [
                         ['', '', ''],
                         ['', '', ''],
                         ['', '', '']
                     ];
-                    return grid
                 }
 
                 function renderGrid(grid) {
@@ -33,17 +38,6 @@ html
                             }
                         }
                     }
-                }
-
-                function clearGrid() {
-                    $('.grid-square').each(function () {
-                        $(this).text('')
-                    });
-                    return grid = [
-                        ['', '', ''],
-                        ['', '', ''],
-                        ['', '', '']
-                    ];;
                 }
 
                 function cyclePlayerToken(turn) {
@@ -66,38 +60,35 @@ html
                 function checkGrid(grid, turn) {
                     if (grid[0][0] + grid[0][1] + grid[0][2] === 'XXX' || grid[1][0] + grid[1][1] + grid[1][2] === 'XXX' || grid[2][0] + grid[2][1] + grid[2][2] === 'XXX') {
                         alert('Winner Player X');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (grid[0][0] + grid[1][0] + grid[2][0] === 'XXX' || grid[0][1] + grid[1][1] + grid[2][1] === 'XXX' || grid[0][2] + grid[1][2] + grid[2][2] === 'XXX') {
                         alert('Winner Player X');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (grid[0][0] + grid[1][1] + grid[2][2] === 'XXX' || grid[2][0] + grid[1][1] + grid[0][2] === 'XXX') {
                         alert('Winner Player X');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (grid[0][0] + grid[0][1] + grid[0][2] === 'OOO' || grid[1][0] + grid[1][1] + grid[1][2] === 'OOO' || grid[2][0] + grid[2][1] + grid[2][2] === 'OOO') {
                         alert('Winner Player O');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (grid[0][0] + grid[1][0] + grid[2][0] === 'OOO' || grid[0][1] + grid[1][1] + grid[2][1] === 'OOO' || grid[0][2] + grid[1][2] + grid[2][2] === 'OOO') {
                         alert('Winner Player O');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (grid[0][0] + grid[1][1] + grid[2][2] === 'OOO' || grid[2][0] + grid[1][1] + grid[0][2] === 'OOO') {
                         alert('Winner Player O');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else if (turn > 7) {
                         alert('Game ends in a draw');
-                        clearGrid();
+                        createClearGrid();
                         newGame();
                     } else {
                         return;
                     }
-                }
-
-                function playGame(turn) {
                 }
 
                 function newGame() {
@@ -107,7 +98,7 @@ html
                 var turn = newGame();
 
                 if (!grid) {
-                    var grid = createGrid();
+                    var grid = createClearGrid();
                     renderGrid(grid);
                 }
 
