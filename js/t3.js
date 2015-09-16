@@ -41,7 +41,9 @@ function cyclePlayerToken(turn) {
     return turn % 2 === 0 ? 'X' : 'O';
 }
 
-function updateGrid(ref, grid, token, turn) {
+function updateGrid(ref, grid, turn) {
+
+    var token = cyclePlayerToken(turn);
 
     var refArray = ref.toString().split(',');
 
@@ -82,6 +84,8 @@ function checkGrid(grid, turn) {
         alert('Game ends in a draw');
         var grid = clearGrid(grid);
         newGame();
+    } else {
+        return turn++;
     }
 }
 
