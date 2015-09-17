@@ -60,12 +60,25 @@ html
                 }
 
                 function checkGrid(token, turn) {
-                    var sum = occupiedSquares[token].reduce(function (a,b) { return a + b; });
+                    //var sum = occupiedSquares[token].reduce(function (a,b) { return a + b; });
 
-                    if (sum === 15) {
-                        alert('Winner Player ' + token);
-                        newGame();
-                    } else if (turn > 7) {
+                    var squares = occupiedSquares[token];
+                    var sum = 0;
+
+                    if (turn < 8){
+                        for (var i = 0, max = squares.length - 2; i < max; i++) {
+                            j = i + 1;
+                            k = squares.length - 1;
+                            while (k >= j) {
+                                sum = squares[i] + squares[j] + squares[k];
+                                if (sum === 15) {
+                                    alert('Winner Player ' + token);
+                                    newGame();
+                                }
+                                sum !== 15 ? k-- : j++;
+                            }
+                        }
+                    } else {
                         alert('Game is tied');
                         newGame();
                     }
